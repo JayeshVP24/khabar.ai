@@ -76,16 +76,6 @@ def twitter():
     global queryString
     print("Url: Twitter, data: ", twitterData)
     print("Url: Twitter, query: ", queryString)
-    # if twitterData is None:
-    #     twitterData = snstwitter.TwitterSearchScraper(query).get_items()
-    #     queryString = query
-    # else:
-    #     if queryString != query:
-    #         twitterData = snstwitter.TwitterSearchScraper(query).get_items()
-    #         queryString = query
-    #     else:
-    #         print(vars(twitterData)) 
-    #         print("not scraping again")
     twitterData = snstwitter.TwitterSearchScraper(query).get_items()
         
     for tweet in twitterData: 
@@ -323,31 +313,8 @@ def plotly_wordcloud2():
     plt.axis('off')
     plt.margins(x=0, y=0)
     
-    # plt.show()
-    # img = BytesIO()
-
-    # plt.savefig("./wordcloud.png", format='png')
-    # plt.imsave("./wordcloud.png", format='png')
-    # img.seek(0)
-    # # nimg = Image.frombytes("RGBA", (128, 128), img, 'raw')
-    # nimg = Image.frombuffer(img)
-    # nimg.save("./wordcloud.png")
-    # plot_url = base64.b64encode(img.getvalue()).decode('utf8')
     return send_file("./wordcloud.png", mimetype='image/png')
-    # return render_template('plot.html', plot_url=plot_url)
-
-# @app.route('/cloud')
-# def plotly_wordcloud():
-#     url = 'https://blogs.jayeshvp24.dev/dive-into-web-design'
-#     goose = Goose()
-#     articles = goose.extract(url)
-#     text = query({
-# 	"inputs":  articles.cleaned_text
-#     })
-#     wc = WordCloud(stopwords = set(STOPWORDS),
-#                    max_words = 200,
-#                    max_font_size = 100)
-#     wc.generate(text[0]['summary_text'])
+    
 @app.route('/propaganda')
 def propaganda():
     url = request.args['url']
@@ -381,68 +348,8 @@ def chat():
     # Return the response as JSON.
     return jsonify({"response": response})
 
-if __name__ == "__main__":
-    app.run(debug=True)
 
-# @app.route('/cloud')
-# def plotly_wordcloud():
-#     url = request.args['url']
-#     goose = Goose()
-#     articles = goose.extract(url)
-#     text = query({
-# 	"inputs":  articles.cleaned_text
-#     })
-#     wc = WordCloud(stopwords = set(STOPWORDS),
-#                    max_words = 200,
-#                    max_font_size = 100)
-#     wc.generate(text[0]['summary_text'])
-    
-#     word_list=[]
-#     freq_list=[]
-#     fontsize_list=[]
-#     position_list=[]
-#     orientation_list=[]
-#     color_list=[]
 
-#     for (word, freq), fontsize, position, orientation, color in wc.layout_:
-#         word_list.append(word)
-#         freq_list.append(freq)
-#         fontsize_list.append(fontsize)
-#         position_list.append(position)
-#         orientation_list.append(orientation)
-#         color_list.append(color)
-        
-#     # get the positions
-#     x=[]
-#     y=[]
-#     for i in position_list:
-#         x.append(i[0])
-#         y.append(i[1])
-            
-#     # get the relative occurence frequencies
-#     new_freq_list = []
-#     for i in freq_list:
-#         new_freq_list.append(i*100)
-#     new_freq_list
-    
-#     trace = go.Scatter(x=x, 
-#                        y=y, 
-#                        textfont = dict(size=new_freq_list,
-#                                        color=color_list),
-#                        hoverinfo='text',
-#                        hovertext=['{0}{1}'.format(w, f) for w, f in zip(word_list, freq_list)],
-#                        mode='text',  
-#                        text=word_list
-#                       )
-    
-#     layout = go.Layout({'xaxis': {'showgrid': False, 'showticklabels': False, 'zeroline': False},
-#                         'yaxis': {'showgrid': False, 'showticklabels': False, 'zeroline': False}})
-    
-#     fig = go.Figure(data=[trace], layout=layout)
-#     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-#     print(graphJSON)
-#     print(type(fig))
-#     return graphJSON
 
 @app.route('/authenticity')
 def auth():
