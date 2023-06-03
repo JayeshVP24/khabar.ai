@@ -350,8 +350,57 @@ def chat():
     return jsonify({"response": response})
 
 
+@app.route('/hate-speech')
+def hate():
+    url = request.args['url']
+    goose = Goose()
+    articles = goose.extract(url)
+    text = articles.cleaned_text
+    analyzer = SentimentIntensityAnalyzer() 
+        # the object outputs the scores into a dict
+    sentiment_dict = analyzer.polarity_scores(text) 
+    if sentiment_dict['compound'] >= 0.05 : 
+        category = ("Positive ")
+    elif sentiment_dict['compound'] <= - 0.05 : 
+        category = ("Negative ") 
+    else : 
+        category = ("Neutral ")
+    print(category)
+    
+    if category == "Negative ":
+        res='Hate Speech'
+    else:
+        res='Not Hate Speech'
+    return jsonify({"sentiment":category,"verdict":res})
+@app.route('/multi-class')
+def category():
+    url = request.args['url']
+    goose = Goose()
+    articles = goose.extract(url)
+    text = articles.cleaned_text
+    # Print the output text.
+    print(text)
+    output=query_hate({
+    "inputs": [str(text)],
+    "keywords": ["LABEL_0", "LABEL_1", "LABEL_2", "LABEL_3"]})
+    # print(output[0])
+    result = {}
+    if text:
+        for data in output[0]:
+            if data['label'] == "LABEL_0":
+                result["ACCEPTABLE"] = round(data['score']*100, 2)
+            elif data['label'] == "LABEL_1":
+                result["INAPPROPRIATE"] = round(data['score']*100, 2)
+            elif data['label'] == "LABEL_2":
+                result["OFFENSIVE"] = round(data['score']*100, 2)
+            elif data['label'] == "LABEL_3":
+                result["VIOLENT"] = round(data['score']*100, 2)
 
+        labels = list(result.keys())
+        values = list(result.values())
+    return jsonify({"result":result})
 
+           
 @app.route('/authenticity')
 def auth():
     url = request.args['url']
