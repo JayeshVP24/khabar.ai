@@ -48,6 +48,11 @@ from llama_index import SimpleDirectoryReader
 from llama_index import GPTVectorStoreIndex
 import llama_index
 
+import io
+import base64
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 
 
 
@@ -277,39 +282,10 @@ def sentiment_article():
         senti.append("Negative")
     else :
         senti.append("Neutral")
+
+
+    
     return jsonify({"result":senti,"pos":sentiment_dict})
-
-
-
-@app.route('/article-sentiment')
-def articleSentiment():
-    url = request.args['url']
-
-    # url = 'https://blogs.jayeshvp24.dev/dive-into-web-design'
-    goose = Goose()
-    articles = goose.extract(url)
-    sentence = articles.cleaned_text[0:500]
-    print(sentence)
-    output=query_hate({
-	"inputs": str(sentence)})
-    print(output)
-    result = {}
-    for data in output[0]:
-        if data['label'] == "LABEL_0":
-            result["ACCEPTABLE"] = data['score']
-        elif data['label'] == "LABEL_1":
-            result["INAPPROAPRIATE"] = data['score']
-        elif data['label'] == "LABEL_2":
-            result["OFFENSIVE"] = data['score']
-        elif data['label'] == "LABEL_3":
-            result["VIOLENT"] = data['score']
-    labels = list(result.keys())
-    values = list(result.values())
-
-    return jsonify({"labels": labels, "values": values})
-            
-
-
 
 
 
@@ -353,9 +329,23 @@ def propaganda():
 	"inputs":  articles.cleaned_text[0:600]
     })
     
-    yes = output[0][0]['score']
+    yes = output[0][0]['score'] 
     no = 1 - yes
-    return jsonify({"yes": yes, "no": no})
+
+    
+
+    data = {"Target": ["Propagandastic","Non-Propagandastic"], "Value": [yes, no]}
+    df = pd.DataFrame(data)
+    sns.barplot(x="Target" , y="Value", data=df)
+    
+    fig = plt.gcf()
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png")
+    buf.seek(0)
+    base64_string = base64.b64encode(buf.read()).decode("utf-8")
+
+    return base64_string
+    # return jsonify({"yes": yes, "no": no})
 
 
 
