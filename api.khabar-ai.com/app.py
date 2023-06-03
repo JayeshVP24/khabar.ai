@@ -44,6 +44,14 @@ from langchain.agents import load_tools
 from langchain.agents import initialize_agent
 from dotenv import load_dotenv
 
+from llama_index import SimpleDirectoryReader
+from llama_index import GPTVectorStoreIndex
+import llama_index
+
+
+
+
+
 app = Flask(__name__)
 
 twitterData = None
@@ -58,12 +66,34 @@ print(os.getenv('OPENAI_API_KEY'))
 print(os.getenv('BEARER_TOKEN'))
 
 
-os.environ['OPENAI_API_KEY']= os.getenv('OPENAI_API_KEY')
-os.environ['SERPAPI_API_KEY']= os.getenv('apikey2')
+os.getenv('OPENAI_API_KEY')
+
 
 @app.route('/')
 def hello_geek():
     return '<h1>Hello from Flask & Docker</h2>'
+
+
+@app.route('/summ')
+def summ():
+
+    url = request.args['url']
+    goose = Goose()
+    articles = goose.extract(url)
+    print(articles.cleaned_text)
+    
+
+    document = BaseDocument(
+        text=articles.cleaned_text,
+    )
+    index = GPTVectorStoreIndex.from_documents(document)
+    query_engine = index.as_query_engine()
+    response = query_engine.query("Please do summarize the text in document")
+    return response
+
+
+
+
 
 @app.route('/twitter')
 def twitter():
@@ -110,7 +140,7 @@ def search():
         'q': search_query,
         'hl': 'en',
         'gl': 'us',
-        'api_key': os.environ.get('apikey2')
+        'api_key': os.getenv('apikey2')
     }
 
     search = GoogleSearch(params)
@@ -131,8 +161,7 @@ def classify_news():
 
     title_template = PromptTemplate(
     input_variables = ['topic'], 
-    template='To classify the news: {topic} in to the categories like murder, fire, accident, natural disaster, etc'
-)
+    template='To classify the news: {topic} in to the categories like murder, fire, accident, natural disaster, etc')
 
 #     script_template = PromptTemplate(
 #     input_variables = ['title', 'wikipedia_research'], 
