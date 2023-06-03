@@ -101,9 +101,9 @@ def twitter():
 def search():
     article_url = request.args.get('url')
     response = requests.get(article_url)
-    soup = BeautifulSoup(response.text, 'html.parser')
+    soup = BeautifulSoup(response.url, 'html.parser')
 
-    header = soup.find('h1').text.strip()
+    header = soup.find('h1').url.strip()
     search_query = quote(header)
 
     params = {
@@ -296,7 +296,7 @@ def summary():
         })
         print(output)
     except:
-        return "Please put the relevant text article"
+        return "Please put the relevant url article"
 
     return jsonify({"result": output[0]['summary_text']})
 
@@ -305,9 +305,9 @@ def plotly_wordcloud2():
     url = request.args['url']
     goose = Goose()
     articles = goose.extract(url)
-    text = articles.cleaned_text
+    url = articles.cleaned_text
     wordcloud = WordCloud(width=1280, height=853, margin=0,
-                      colormap='Blues').generate(text)
+                      colormap='Blues').generate(url)
     wordcloud.to_file("./wordcloud.png")
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis('off')
@@ -355,10 +355,10 @@ def hate():
     url = request.args['url']
     goose = Goose()
     articles = goose.extract(url)
-    text = articles.cleaned_text
+    url = articles.cleaned_text
     analyzer = SentimentIntensityAnalyzer() 
         # the object outputs the scores into a dict
-    sentiment_dict = analyzer.polarity_scores(text) 
+    sentiment_dict = analyzer.polarity_scores(url) 
     if sentiment_dict['compound'] >= 0.05 : 
         category = ("Positive ")
     elif sentiment_dict['compound'] <= - 0.05 : 
@@ -375,17 +375,15 @@ def hate():
 @app.route('/multi-class')
 def category():
     url = request.args['url']
-    goose = Goose()
-    articles = goose.extract(url)
-    text = articles.cleaned_text
-    # Print the output text.
-    print(text)
+
+    # Print the output url.
+    print(url)
     output=query_hate({
-    "inputs": [str(text)],
+    "inputs": [str(url)],
     "keywords": ["LABEL_0", "LABEL_1", "LABEL_2", "LABEL_3"]})
     # print(output[0])
     result = {}
-    if text:
+    if url:
         for data in output[0]:
             if data['label'] == "LABEL_0":
                 result["ACCEPTABLE"] = round(data['score']*100, 2)
