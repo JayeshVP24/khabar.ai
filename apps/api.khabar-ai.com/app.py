@@ -44,8 +44,12 @@ from langchain.agents import load_tools
 from langchain.agents import initialize_agent
 from dotenv import load_dotenv
 
-app = Flask(__name__)
+from flask_cors import CORS
 
+
+
+app = Flask(__name__)
+CORS(app)
 twitterData = None
 queryString = None
 
@@ -395,4 +399,4 @@ def botActivity():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0",port=5000,debug=True)
