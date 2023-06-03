@@ -31,6 +31,7 @@ from llama_index import GPTVectorStoreIndex, SimpleDirectoryReader
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import quote
+import serpapi
 from serpapi import GoogleSearch
 import os
 
