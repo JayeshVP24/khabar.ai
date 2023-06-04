@@ -444,7 +444,34 @@ def category():
 
         labels = list(result.keys())
         values = list(result.values())
-    return jsonify({"result":result})
+
+
+    data = {"Target":list(result.keys()) , "Value": list(result.values())}
+    df = pd.DataFrame(data)
+    
+    sns.barplot(x="Target" , y="Value", data=df, palette="Set2")
+    plt.title("Hate Speech Params Detection present in Article")
+
+    # fig = plt.gcf()
+    # buf = io.BytesIO()
+    # fig.savefig(buf, format="png")
+    # buf.seek(0)
+    # base64_string = base64.b64encode(buf.read()).decode("utf-8")
+    plt.savefig('hate.png')
+
+    # fig = plt.gcf()
+    # buf = io.BytesIO()
+    # fig.savefig(buf, format="png")
+    # buf.seek(0)
+    # base64_string = base64.b64encode(buf.read()).decode("utf-8")
+
+    # print(base64_string)
+    # return base64_string
+
+    return send_file("./hate.png", mimetype='image/png')
+
+
+    # return jsonify({"result":result})
 
            
 @app.route('/authenticity')
