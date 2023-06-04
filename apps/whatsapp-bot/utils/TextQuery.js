@@ -1,0 +1,4 @@
+class TextQuery {
+
+    static multiclassClassficiation()
+}

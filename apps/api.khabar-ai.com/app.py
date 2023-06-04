@@ -245,9 +245,9 @@ def sentiment():
     target=["Positive","Negative", "Neutral"]
     value=[positive, negative, neutral]
 
-    palette_color = sns.color_palette('bright')
-    plt.pie(value, labels=target, colors=palette_color, autopct='%.0f%%')
-    # sns.barplot(x="Target" , y="Value", data=df, palette="Set2")
+    # palette_color = sns.color_palette('bright')
+    #plt.pie(value, labels=target, colors=palette_color, autopct='%.0f%%')
+    sns.barplot(x="Target" , y="Value", data=df, palette="Set2")
     plt.title("Sentiment Analysis on the Tweets related to Article")
 
     plt.savefig('senti.png')
