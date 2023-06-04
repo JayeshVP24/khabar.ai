@@ -106,7 +106,7 @@ def twitter():
     tweets = {"likecount":likecount,"retweet":retweet,"hashtags":list(hashtags),"count":i}
     print(tweets)
     return jsonify({'result':tweets})
-
+os.getenv('SERPAPI_API_KEY')
 #For getting the realted link - by providing the URL
 @app.route('/search', methods=['GET'])
 def search():
@@ -121,7 +121,7 @@ def search():
         'q': search_query,
         'hl': 'en',
         'gl': 'us',
-        'api_key': os.getenv('apikey2')
+        'api_key': os.getenv('SERPAPI_API_KEY')
     }
 
     search = GoogleSearch(params)
