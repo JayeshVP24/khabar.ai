@@ -75,20 +75,20 @@ With Khabar.AI, you'll gain access to advanced features like sentiment analysis,
 
 
 
-
 ## Tech Stack
 
-**Frontend** - Next.js, TailwindCSS
+**Frontend** - Whatsapp Bot
 
 **Backend** - Flask
 
-**Other Tools** - Twitter, HuggingFace
+**Other Tools** - Twitter, HuggingFace, LlamaIndex, Langchain, Plotly, Seaborn, Serp
 
 
 
 ## Languages and Tools
 
-<p align="left"> <a href="https://www.gnu.org/software/bash/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/gnu_bash/gnu_bash-icon.svg" alt="bash" width="40" height="40"/> </a>  <a href="https://git-scm.com/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg" alt="git" width="40" height="40"/> <a href="https://flask.palletsprojects.com/en/2.2.x/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/pocoo_flask/pocoo_flask-icon.svg" alt="nodejs" width="40" height="40"/> </a><a href="https://huggingface.co/" target="_blank" rel="noreferrer"> <img src="https://www.svgrepo.com/show/401953/hugging-face.svg" alt="nodejs" width="40" height="40"/> </a>
+<p align="left"> <a href="https://www.gnu.org/software/bash/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/gnu_bash/gnu_bash-icon.svg" alt="bash" width="40" height="40"/> </a>  <a href="https://git-scm.com/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg" alt="git" width="40" height="40"/> <a href="https://flask.palletsprojects.com/en/2.2.x/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/pocoo_flask/pocoo_flask-icon.svg" alt="nodejs" width="40" height="40"/> </a><a href="https://huggingface.co/" target="_blank" rel="noreferrer"> <img src="https://www.svgrepo.com/show/401953/hugging-face.svg" alt="nodejs" width="40" height="40"/> </a><a href="https://llamahub.ai/" target="_blank" rel="noreferrer"> <img src="https://aeiljuispo.cloudimg.io/v7/https://s3.amazonaws.com/moonup/production/uploads/6424f01ea4f3051f54dbbd85/oqVQ04b5KiGt5WOWJmYt8.png?w=200&h=200&f=face" alt="nodejs" width="40" height="40"/> </a><a href="https://llamahub.ai/" target="_blank" rel="noreferrer"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/WhatsApp_Logo.svg/2048px-WhatsApp_Logo.svg.png" alt="nodejs" width="40" height="40"/> </a>
+ 
  
  
  
