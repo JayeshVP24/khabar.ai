@@ -168,6 +168,27 @@ class UrlLinks {
         return "error";
       }
   }
+/**
+ * 
+ * @param {string} url 
+ * @returns {BlobPart}
+ */
+  static wordcloud = async (url) => {
+    const uri = new URL(BACKEND_URL);
+    uri.pathname = "/cloud2";
+    uri.searchParams.append("url", url);
+    console.log(uri.toString());
+    try {
+        const res = await fetch(uri.toString(), {
+          headers: HEADER,
+        });
+        const data = await res.blob();
+        return data
+      } catch {
+        console.log("error");
+        return "error";
+      }
+  }
 
 }
 

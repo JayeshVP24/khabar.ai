@@ -1,7 +1,8 @@
 const qrcode = require("qrcode-terminal");
+const fs = require("fs");
 // import qrcode from "qrcode-terminal"
 // import {analzyer} from "./utils/analyzer.js";
-const {  base64ToImage } = require("./utils/actions.js");
+const {  base64ToImage, blobToFile } = require("./utils/actions.js");
 const { UrlLinks } = require("./utils/UrlLinks.js");
 const { Client, MessageMedia, LocalAuth } = require("whatsapp-web.js");
 // import { Client, MessageMedia, LocalAuth } from "whatsapp-web.js";
@@ -38,6 +39,8 @@ client.on("ready", () => {
 //     client.sendMessage(message.from, media);
 //   }
 // });
+
+
 
 client.on("message", async (message) => {
   if (UrlLinks.urlFromMsg(message.body) !== null) {
@@ -78,14 +81,35 @@ Hashtags: ${twitter.hashtags.join("  ")}
   _based on google's list of blacklisted news sources_
   `
   
+  //word cloud
+  const wordCloud = await UrlLinks.wordcloud(UrlLinks.urlFromMsg(message.body));
+  // console.log("word cloud url: ", wordCloud)
+  // // const wordCloudImage = new MessageMedia("image/png", wordCloud);
+  // // new File([wordCloud], 'wordcloud.png', {
+  // //   type: wordCloud.type,
+  // // });
+  const buffer = Buffer.from( await wordCloud.arrayBuffer() );
+  await fs.writeFile('wordcloud.png', buffer, async () => {
+
+    const wordCloudImage =  await MessageMedia.fromFilePath("./wordcloud.png")
+    await client.sendMessage(message.from, wordCloudImage);
+  } );
+
+  // // blobToFile(wordCloud, "./wordcloud.png")
+
+
+
   // propaganda check
-  // const propaganda = await UrlLinks.propogandaCheck(UrlLinks.urlFromMsg(message.body));
+  const propaganda = await UrlLinks.propogandaCheck(UrlLinks.urlFromMsg(message.body));
   // console.log(propaganda)
-  // // const propogandaMedia = new MessageMedia("image/png", propaganda);
+  // const propogandaMedia = new MessageMedia("image/png", propaganda);
   // base64ToImage(propaganda, "./propaganda.png");
   // try {
     //   const media = MessageMedia.fromFilePath("./propaganda.png");
-    //   client.sendMessage(message.from, propogandaMedia);
+      // client.sendMessage(message.from, {
+      //   mimetype: "image/png",
+      //   data: propaganda,
+      // });
     // } catch {
       //   console.log("propoganda image failed")
       // }
@@ -101,11 +125,14 @@ Hashtags: ${twitter.hashtags.join("  ")}
       
       
     } else {
-      
+
     }
 
 });
-
+// client.on("message", async (message) => {
+//   const media = MessageMedia.fromFilePath("./wordcloud.png");
+//   client.sendMessage(message.from, media);
+// })
 // console.log(analzyer("hello world"))
 
 client.initialize();

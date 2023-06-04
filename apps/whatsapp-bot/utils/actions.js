@@ -1,4 +1,5 @@
 const fs = require('fs');
+const stream = require('stream');
 
 function base64ToImage(base64String, outputFilePath) {
   // Remove the data:image/<image_type>;base64 prefix
@@ -17,4 +18,28 @@ function base64ToImage(base64String, outputFilePath) {
   });
 }
 
-module.exports = { base64ToImage };
+
+function blobToFile(blob, outputFilePath) {
+  const fileWriteStream = fs.createWriteStream(outputFilePath);
+
+  // Create a readable stream from the Blob object
+  const blobStream = new stream.PassThrough();
+  blobStream.end(blob.buffer);
+
+  // Pipe the readable stream to the file write stream
+  blobStream.pipe(fileWriteStream);
+
+  return new Promise((resolve, reject) => {
+    fileWriteStream.on('finish', () => {
+      console.log(`File saved to ${outputFilePath}`);
+      resolve();
+    });
+
+    fileWriteStream.on('error', (error) => {
+      console.error('Error:', error);
+      reject(error);
+    });
+  });
+}
+
+module.exports = { base64ToImage , blobToFile};
