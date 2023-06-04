@@ -310,17 +310,19 @@ def plotly_wordcloud2():
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis('off')
     plt.margins(x=0, y=0)
-    
-    fig = plt.gcf()
-    buf = io.BytesIO()
-    fig.savefig(buf, format="png")
-    buf.seek(0)
-    base64_string = base64.b64encode(buf.read()).decode("utf-8")
 
-    print(base64_string)
-    return base64_string
+    # fig = plt.gcf()
+    # buf = io.BytesIO()
+    # fig.savefig(buf, format="png")
+    # buf.seek(0)
+    # base64_string = base64.b64encode(buf.read()).decode("utf-8")
+
+    # print(base64_string)
+    # return base64_string
+
+    return send_file("./wordcloud.png", mimetype='image/png')
     
-    # return send_file("./wordcloud.png", mimetype='image/png')
+
     
 @app.route('/propaganda')
 def propaganda():
