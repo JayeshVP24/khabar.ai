@@ -245,9 +245,9 @@ def sentiment():
     target=["Positive","Negative", "Neutral"]
     value=[positive, negative, neutral]
 
-    palette_color = sns.color_palette('bright')
-    plt.pie(value, labels=target, colors=palette_color, autopct='%.0f%%')
-    # sns.barplot(x="Target" , y="Value", data=df, palette="Set2")
+    # palette_color = sns.color_palette('bright')
+    #plt.pie(value, labels=target, colors=palette_color, autopct='%.0f%%')
+    sns.barplot(x="Target" , y="Value", data=df, palette="Set2")
     plt.title("Sentiment Analysis on the Tweets related to Article")
 
     fig = plt.gcf()
@@ -258,7 +258,7 @@ def sentiment():
     base64_string = base64.b64encode(buf.read()).decode("utf-8")
 
     print(base64_string)
-    return base64_string
+    return jsonify({"data":base64_string})
     # return {"labels":labels, "values":values}
             
 @app.route('/sentiment_article')
@@ -345,7 +345,7 @@ def propaganda():
     buf.seek(0)
     base64_string = base64.b64encode(buf.read()).decode("utf-8")
 
-    return base64_string
+    return jsonify({"data": base64_string})
     # return jsonify({"yes": yes, "no": no})
 
 
