@@ -341,13 +341,25 @@ def propaganda():
     sns.barplot(x="Target" , y="Value", data=df, palette="Set2")
     plt.title("Propagandastic Evaluation of the Article")
 
-    fig = plt.gcf()
-    buf = io.BytesIO()
-    fig.savefig(buf, format="png")
-    buf.seek(0)
-    base64_string = base64.b64encode(buf.read()).decode("utf-8")
+    # fig = plt.gcf()
+    # buf = io.BytesIO()
+    # fig.savefig(buf, format="png")
+    # buf.seek(0)
+    # base64_string = base64.b64encode(buf.read()).decode("utf-8")
+    plt.savefig('propaganda.png')
 
-    return base64_string
+    # fig = plt.gcf()
+    # buf = io.BytesIO()
+    # fig.savefig(buf, format="png")
+    # buf.seek(0)
+    # base64_string = base64.b64encode(buf.read()).decode("utf-8")
+
+    # print(base64_string)
+    # return base64_string
+
+    return send_file("./propaganda.png", mimetype='image/png')
+
+    # return base64_string
     # return jsonify({"yes": yes, "no": no})
 
 
