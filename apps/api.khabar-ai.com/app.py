@@ -45,6 +45,14 @@ from langchain.agents import initialize_agent
 from dotenv import load_dotenv
 
 from flask_cors import CORS
+from llama_index import SimpleDirectoryReader
+from llama_index import GPTVectorStoreIndex
+import llama_index
+
+import io
+import base64
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 
@@ -62,8 +70,7 @@ print(os.getenv('OPENAI_API_KEY'))
 print(os.getenv('BEARER_TOKEN'))
 
 
-os.environ['OPENAI_API_KEY']= os.getenv('OPENAI_API_KEY')
-os.environ['SERPAPI_API_KEY']= os.getenv('apikey2')
+os.getenv('OPENAI_API_KEY')
 
 @app.route('/')
 def hello_geek():
@@ -114,7 +121,7 @@ def search():
         'q': search_query,
         'hl': 'en',
         'gl': 'us',
-        'api_key': os.environ.get('apikey2')
+        'api_key': os.getenv('apikey2')
     }
 
     search = GoogleSearch(params)
@@ -232,7 +239,27 @@ def sentiment():
     labels = list(senti.keys())
     values = list(senti.values())
         
-    return {"labels":labels, "values":values}
+    data = {"Target": ["Positive","Negative", "Neutral"], "Value": [positive, negative, neutral]}
+    df = pd.DataFrame(data)
+
+    target=["Positive","Negative", "Neutral"]
+    value=[positive, negative, neutral]
+
+    palette_color = sns.color_palette('bright')
+    plt.pie(value, labels=target, colors=palette_color, autopct='%.0f%%')
+    # sns.barplot(x="Target" , y="Value", data=df, palette="Set2")
+    plt.title("Sentiment Analysis on the Tweets related to Article")
+
+    fig = plt.gcf()
+
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png")
+    buf.seek(0)
+    base64_string = base64.b64encode(buf.read()).decode("utf-8")
+
+    print(base64_string)
+    return base64_string
+    # return {"labels":labels, "values":values}
             
 @app.route('/sentiment_article')
 def sentiment_article():
@@ -253,39 +280,6 @@ def sentiment_article():
     else :
         senti.append("Neutral")
     return jsonify({"result":senti,"pos":sentiment_dict})
-
-
-
-@app.route('/article-sentiment')
-def articleSentiment():
-    url = request.args['url']
-
-    # url = 'https://blogs.jayeshvp24.dev/dive-into-web-design'
-    goose = Goose()
-    articles = goose.extract(url)
-    sentence = articles.cleaned_text[0:500]
-    print(sentence)
-    output=query_hate({
-	"inputs": str(sentence)})
-    print(output)
-    result = {}
-    for data in output[0]:
-        if data['label'] == "LABEL_0":
-            result["ACCEPTABLE"] = data['score']
-        elif data['label'] == "LABEL_1":
-            result["INAPPROAPRIATE"] = data['score']
-        elif data['label'] == "LABEL_2":
-            result["OFFENSIVE"] = data['score']
-        elif data['label'] == "LABEL_3":
-            result["VIOLENT"] = data['score']
-    labels = list(result.keys())
-    values = list(result.values())
-
-    return jsonify({"labels": labels, "values": values})
-            
-
-
-
 
 
 @app.route('/summary')
@@ -330,8 +324,20 @@ def propaganda():
     
     yes = output[0][0]['score']
     no = 1 - yes
-    return jsonify({"yes": yes, "no": no})
+    
+    data = {"Target": ["Propagandastic","Non-Propagandastic"], "Value": [yes, no]}
+    df = pd.DataFrame(data)
+    sns.barplot(x="Target" , y="Value", data=df, palette="Set2")
+    plt.title("Propagandastic Evaluation of the Article")
 
+    fig = plt.gcf()
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png")
+    buf.seek(0)
+    base64_string = base64.b64encode(buf.read()).decode("utf-8")
+
+    return base64_string
+    # return jsonify({"yes": yes, "no": no})
 
 
 @app.route("/chat", methods=["GET"])
