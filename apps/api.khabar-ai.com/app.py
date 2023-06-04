@@ -386,9 +386,13 @@ def chat():
     # create reader, specify twitter handles
     reader = TwitterTweetReader(os.getenv('BEARER_TOKEN'))
     documents = reader.load_data(["ANI"])
-    documents1 = reader.load_data(["TOIIndiaNews"])
+    documents1 = reader.load_data(["ZeeNews"])
+    documents2 = reader.load_data(["TV9Bharatvarsh"])
+    documents3 = reader.load_data(["Republic_Bharat"])
+    documents4 = reader.load_data(["AajTak"])
+    
     # Create a new instance of the llama chatbot agent.
-    agent = llama_index.GPTVectorStoreIndex.from_documents(documents1)
+    agent = llama_index.GPTVectorStoreIndex.from_documents(documents1+documents+documents2+documents3+documents4)
     chat_engine = agent.as_chat_engine(verbose=True)
 
     # Get the response from the llama chatbot agent.
